@@ -71,11 +71,11 @@ The reference build uses:
 - USB data cable
 - 5 V supply capable of powering the sign
 
-The firmware defaults to **GPIO 4**. Typical low-side switching is:
+The firmware defaults to **GPIO 7**. Typical low-side switching is:
 
 | From | To |
 | --- | --- |
-| ESP32 GPIO 4 | MOSFET trigger/PWM |
+| ESP32 GPIO 7 | MOSFET trigger/PWM |
 | ESP32 GND | MOSFET logic ground and supply ground |
 | 5 V positive | Sign positive |
 | Sign negative | MOSFET switched/load negative |

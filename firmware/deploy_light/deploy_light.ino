@@ -4,9 +4,10 @@
 
 namespace {
 
-constexpr uint8_t LIGHT_PIN = 4;
+constexpr uint8_t LIGHT_PIN = 7;
 constexpr uint32_t SERIAL_BAUD = 115200;
-constexpr uint8_t PWM_BITS = 8;
+constexpr uint32_t PWM_FREQUENCY_HZ = 5000;
+constexpr uint8_t PWM_RESOLUTION_BITS = 8;
 constexpr uint8_t PWM_OFF = 0;
 constexpr uint8_t PWM_FULL = 255;
 
@@ -36,6 +37,7 @@ struct ParsedCommand {
 State currentState = State::IDLE;
 uint32_t stateStartedAt = 0;
 uint8_t currentDuty = PWM_OFF;
+bool pwmAttached = false;
 
 char serialBuffer[MAX_COMMAND_LENGTH + 1];
 size_t serialLength = 0;
@@ -47,7 +49,13 @@ void setLight(uint8_t duty) {
   }
 
   currentDuty = duty;
-  analogWrite(LIGHT_PIN, duty);
+
+  if (pwmAttached) {
+    ledcWrite(LIGHT_PIN, duty);
+    return;
+  }
+
+  digitalWrite(LIGHT_PIN, duty > PWM_OFF ? HIGH : LOW);
 }
 
 void enterState(State nextState, uint32_t now) {
@@ -237,8 +245,14 @@ void updateAnimation(uint32_t now) {
 
 void setup() {
   pinMode(LIGHT_PIN, OUTPUT);
-  analogWriteResolution(LIGHT_PIN, PWM_BITS);
-  analogWrite(LIGHT_PIN, PWM_OFF);
+  digitalWrite(LIGHT_PIN, LOW);
+  pwmAttached =
+      ledcAttach(LIGHT_PIN, PWM_FREQUENCY_HZ, PWM_RESOLUTION_BITS);
+
+  if (pwmAttached) {
+    ledcWrite(LIGHT_PIN, PWM_OFF);
+  }
+
   Serial.begin(SERIAL_BAUD);
   stateStartedAt = millis();
 }
@@ -248,4 +262,3 @@ void loop() {
   readSerial(now);
   updateAnimation(now);
 }
-

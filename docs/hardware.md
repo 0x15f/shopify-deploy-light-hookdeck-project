@@ -8,7 +8,7 @@
 - USB data cable
 - 5 V supply sized for the sign's measured current
 
-The firmware drives `GPIO 4` with PWM. Change `LIGHT_PIN` in the sketch when
+The firmware drives `GPIO 7` with PWM. Change `LIGHT_PIN` in the sketch when
 using another output.
 
 ## Low-side switching
@@ -20,7 +20,7 @@ The MOSFET belongs in the sign's negative return path:
 LED sign negative ──────────────────────── MOSFET load/output negative
 5 V ground ───────┬─────────────────────── MOSFET input/source ground
                   └─────────────────────── ESP32 GND
-ESP32 GPIO 4 ───────────────────────────── MOSFET trigger/PWM
+ESP32 GPIO 7 ───────────────────────────── MOSFET trigger/PWM
 ```
 
 Some modules expose both positive and negative input/output terminals. On those
@@ -35,7 +35,7 @@ For a ZX-5L-style module labeled like the reference hardware:
 | `VIN-` | 5 V supply ground and ESP32 ground |
 | `OUT+` | Sign positive |
 | `OUT-` | Sign negative |
-| `TRIG/PWM` | ESP32 GPIO 4 |
+| `TRIG/PWM` | ESP32 GPIO 7 |
 | `GND` beside trigger | ESP32 ground |
 
 ## Power
@@ -58,7 +58,7 @@ connected unless the board explicitly supports that power arrangement.
 2. Verify `VIN+`, `VIN-`, `OUT+`, and `OUT-` from the silkscreen.
 3. Trim stranded wire so no bare copper remains outside a terminal.
 4. Confirm supply ground, MOSFET ground, and ESP32 ground are common.
-5. Confirm the trigger is on GPIO 4, not `3.3V`, `5V`, or a USB data pin.
+5. Confirm the trigger is on GPIO 7, not `3.3V`, `5V`, or a USB data pin.
 6. Check resistance between 5 V and ground for an obvious short before power-up.
 7. Power the ESP32 and MOSFET without the sign first.
 8. Add the sign only after USB serial remains stable.
