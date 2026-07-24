@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="dark" />
+    <meta
+      name="description"
+      content="Local controls and connection status for the Deploy Light."
+    />
+    <title>Deploy Light</title>
+    <link rel="stylesheet" href="/styles.css" />
+    <script src="/app.js" defer></script>
+  </head>
+  <body>
+    <main class="shell">
+      <header class="masthead">
+        <div class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 32 32" role="img">
+            <path d="M10 25h12M13 25V11a3 3 0 0 1 6 0v14" />
+            <path d="M9 14h14l-1.5-4.5A5.8 5.8 0 0 0 16 5.5a5.8 5.8 0 0 0-5.5 4L9 14Z" />
+          </svg>
+        </div>
+        <div>
+          <p class="eyebrow">Hardware bridge</p>
+          <h1>Deploy Light</h1>
+        </div>
+        <div class="daemon-status" id="daemon-status" role="status">
+          <span class="daemon-dot" aria-hidden="true"></span>
+          <span id="daemon-label">Connecting</span>
+        </div>
+      </header>
+
+      <section class="status-card" aria-labelledby="serial-heading">
+        <div class="status-copy">
+          <p class="section-label" id="serial-heading">Serial connection</p>
+          <div class="connection-line">
+            <span class="connection-light" id="connection-light" aria-hidden="true"></span>
+            <h2 id="connection-label">Checking device…</h2>
+          </div>
+          <p class="device-path" id="device-path">Waiting for daemon status</p>
+        </div>
+        <div class="queue-block">
+          <span class="queue-value" id="queue-value">—</span>
+          <span class="queue-label">Queued</span>
+        </div>
+      </section>
+
+      <section class="telemetry" aria-label="Deployment telemetry">
+        <article class="metric">
+          <p class="section-label">Last deployment</p>
+          <p class="metric-value state-value" id="deployment-state">—</p>
+          <time class="metric-time" id="deployment-time">No event received</time>
+        </article>
+        <article class="metric">
+          <p class="section-label">Last command sent</p>
+          <p class="metric-value command-value" id="command-sent">—</p>
+          <time class="metric-time" id="command-time">Nothing sent yet</time>
+        </article>
+        <article class="metric">
+          <p class="section-label">Firmware response</p>
+          <p class="metric-value command-value" id="firmware-response">—</p>
+          <time class="metric-time" id="response-time">No response yet</time>
+        </article>
+      </section>
+
+      <section class="controls" aria-labelledby="controls-heading">
+        <div class="controls-heading">
+          <div>
+            <p class="section-label">Manual test</p>
+            <h2 id="controls-heading">Trigger the sign</h2>
+          </div>
+          <p>Commands are queued if the ESP32 is offline.</p>
+        </div>
+
+        <div class="button-grid">
+          <button class="command-button building" type="button" data-state="building">
+            <span class="button-icon breathing" aria-hidden="true"></span>
+            <span>
+              <strong>Building</strong>
+              <small>Slow breath</small>
+            </span>
+          </button>
+          <button class="command-button success" type="button" data-state="success">
+            <span class="button-icon" aria-hidden="true"></span>
+            <span>
+              <strong>Success</strong>
+              <small>Three flashes</small>
+            </span>
+          </button>
+          <button class="command-button failure" type="button" data-state="failure">
+            <span class="button-icon" aria-hidden="true"></span>
+            <span>
+              <strong>Failure</strong>
+              <small>Rapid flash</small>
+            </span>
+          </button>
+          <button class="command-button off" type="button" data-state="off">
+            <span class="button-icon" aria-hidden="true"></span>
+            <span>
+              <strong>Off</strong>
+              <small>Light out</small>
+            </span>
+          </button>
+        </div>
+        <p class="feedback" id="feedback" aria-live="polite"></p>
+      </section>
+    </main>
+  </body>
+</html>
+

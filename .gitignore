@@ -1,0 +1,27 @@
+# Secrets and local configuration
+.env
+.env.*
+!.env.example
+
+# Dependencies and generated reports
+node_modules/
+coverage/
+.nyc_output/
+*.log
+npm-debug.log*
+
+# Firmware build output
+firmware/**/build/
+firmware/**/*.bin
+firmware/**/*.elf
+firmware/**/*.map
+
+# Machine-specific launchd files
+server/*.plist
+
+# Editors and operating systems
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*~

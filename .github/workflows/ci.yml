@@ -1,0 +1,45 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  server:
+    name: Node server
+    runs-on: macos-latest
+    defaults:
+      run:
+        working-directory: server
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v6
+        with:
+          node-version-file: server/.nvmrc
+          cache: npm
+          cache-dependency-path: server/package-lock.json
+      - run: npm ci
+      - run: npm test
+      - run: npm run check
+
+  firmware:
+    name: ESP32-C3 firmware
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: arduino/setup-arduino-cli@v2
+      - name: Install ESP32 Arduino core
+        run: |
+          arduino-cli core update-index \
+            --additional-urls https://espressif.github.io/arduino-esp32/package_esp32_index.json
+          arduino-cli core install esp32:esp32@3.3.11 \
+            --additional-urls https://espressif.github.io/arduino-esp32/package_esp32_index.json
+      - name: Compile firmware
+        run: |
+          arduino-cli compile \
+            --fqbn 'esp32:esp32:esp32c3:CDCOnBoot=cdc' \
+            firmware/deploy_light

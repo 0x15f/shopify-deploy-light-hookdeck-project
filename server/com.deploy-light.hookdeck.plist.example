@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+  <dict>
+    <key>Label</key>
+    <string>com.deploy-light.hookdeck</string>
+
+    <key>ProgramArguments</key>
+    <array>
+      <string>/usr/bin/expect</string>
+      <string>/ABSOLUTE/PATH/deploy-light/server/scripts/hookdeck-listen.exp</string>
+    </array>
+
+    <key>WorkingDirectory</key>
+    <string>/ABSOLUTE/PATH/deploy-light/server</string>
+
+    <key>EnvironmentVariables</key>
+    <dict>
+      <key>HOME</key>
+      <string>/Users/YOU</string>
+      <key>PATH</key>
+      <string>/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin</string>
+      <key>HOOKDECK_BIN</key>
+      <string>/ABSOLUTE/PATH/TO/hookdeck</string>
+      <key>HOOKDECK_FORWARD_PORT</key>
+      <string>3000</string>
+      <key>HOOKDECK_SOURCE</key>
+      <string>deploy-light</string>
+      <key>HOOKDECK_FORWARD_PATH</key>
+      <string>/hookdeck</string>
+    </dict>
+
+    <key>RunAtLoad</key>
+    <true />
+    <key>KeepAlive</key>
+    <true />
+    <key>ProcessType</key>
+    <string>Background</string>
+    <key>ThrottleInterval</key>
+    <integer>10</integer>
+
+    <key>StandardOutPath</key>
+    <string>/tmp/deploy-light-hookdeck.stdout.log</string>
+    <key>StandardErrorPath</key>
+    <string>/tmp/deploy-light-hookdeck.stderr.log</string>
+  </dict>
+</plist>

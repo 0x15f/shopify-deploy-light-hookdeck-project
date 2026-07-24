@@ -1,0 +1,30 @@
+{
+  "name": "@deploy-light/server",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Hookdeck-to-serial bridge for the Deploy Light",
+  "license": "MIT",
+  "type": "commonjs",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "node --test",
+    "test:watch": "node --test --watch",
+    "check": "node --check src/*.js && node --check public/app.js"
+  },
+  "keywords": [
+    "esp32",
+    "github-actions",
+    "hookdeck",
+    "serialport",
+    "webhook"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
+  "dependencies": {
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "serialport": "^13.0.0"
+  }
+}

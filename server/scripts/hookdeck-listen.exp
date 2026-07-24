@@ -1,0 +1,65 @@
+#!/usr/bin/expect -f
+
+proc envOrDefault {name fallback} {
+  global env
+
+  if {[info exists env($name)] && $env($name) ne ""} {
+    return $env($name)
+  }
+
+  return $fallback
+}
+
+set timeout -1
+set env(TERM) "xterm-256color"
+
+set hookdeckBin [envOrDefault "HOOKDECK_BIN" "hookdeck"]
+set forwardPort [envOrDefault "HOOKDECK_FORWARD_PORT" "3000"]
+set sourceAlias [envOrDefault "HOOKDECK_SOURCE" "deploy-light"]
+set forwardPath [envOrDefault "HOOKDECK_FORWARD_PATH" "/hookdeck"]
+
+if {[file pathtype $hookdeckBin] eq "relative"} {
+  set resolvedBin [auto_execok $hookdeckBin]
+
+  if {$resolvedBin eq ""} {
+    puts stderr "hookdeck executable not found in PATH"
+    exit 127
+  }
+
+  set hookdeckBin $resolvedBin
+}
+
+set command [list \
+  $hookdeckBin \
+  listen \
+  $forwardPort \
+  $sourceAlias \
+  --path \
+  $forwardPath \
+  --output \
+  compact \
+  --color \
+  off]
+
+spawn -noecho {*}$command
+
+# Some Hookdeck CLI versions query terminal colors/cursor position even in
+# compact mode. launchd has no terminal to answer, so provide safe defaults.
+expect {
+  -re {\x1b\]10;\?\x1b\\} {
+    send -- "\033]10;rgb:ffff/ffff/ffff\033\\"
+    exp_continue
+  }
+  -re {\x1b\]11;\?\x1b\\} {
+    send -- "\033]11;rgb:0000/0000/0000\033\\"
+    exp_continue
+  }
+  -re {\x1b\[6n} {
+    send -- "\033\[1;1R"
+    exp_continue
+  }
+  eof {
+    catch wait result
+    exit [lindex $result 3]
+  }
+}
